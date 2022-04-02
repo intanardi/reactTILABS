@@ -1,50 +1,31 @@
 import React, { Component } from 'react'
-import {Hasil, ListCategories, NavbarComponents, Order} from "./components";
-
-import {Col, Row} from "react-bootstrap"
-import {API_ORDER, API_PAYMENT} from './utils/constants'
-import axios from 'axios'
+import {Payment, Order} from "./components";
+import { BrowserRouter, Route, Switch, Link } from 'react-router-dom'
+import {Nav, Navbar, Container} from 'react-bootstrap'
 
 export default class App extends Component {
-  constructor(props) {
-    super(props)
-  
-    this.state = {
-       products : [],
-    }
-  }
-  
-  componentDidMount(){
-    axios.get(API_ORDER+"product")
-      .then(res => {
-        const products = res.data;
-        this.setState({ products });
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  
-  }
+
   render() {
-    const {products} = this.state
-    console.log(products)
     return (
-      <div className="App">
-      <NavbarComponents/>
-      <Row>
-        <Col>
-          <h4><strong>Daftar Produk</strong></h4>
-          <hr />
-          <Row>
-            <ul>
-            {products && products.map((product) =>(
-              <li>product : {product.name} <br /> price : {product.price}</li>
-            ))}
-            </ul>
-          </Row>
-        </Col>
-      </Row>
-    </div>
+      <BrowserRouter>
+        <Navbar bg="dark" variant="dark" expand="lg">
+            <Container>
+                <Navbar.Brand href="#home"><strong>Ocommerce</strong></Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="me-auto">
+                    <Nav.Link as={Link} to="/order">Order</Nav.Link>
+                    <Nav.Link as={Link} to="/payment">Payment</Nav.Link>
+                </Nav>
+                </Navbar.Collapse>
+            </Container>
+        </Navbar>
+        
+        <Switch>
+            <Route path="/order" exact component={Order} />
+            <Route path="/payment" exact component={Payment} />
+        </Switch>
+    </BrowserRouter>
     )
   }
 }
